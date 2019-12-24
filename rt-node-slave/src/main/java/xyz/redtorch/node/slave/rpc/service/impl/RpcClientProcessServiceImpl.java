@@ -8,8 +8,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.compress.compressors.lz4.FramedLZ4CompressorInputStream;
-import org.apache.commons.compress.compressors.lz4.FramedLZ4CompressorOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +19,8 @@ import org.springframework.stereotype.Service;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import net.jpountz.lz4.LZ4FrameInputStream;
+import net.jpountz.lz4.LZ4FrameOutputStream;
 import xyz.redtorch.common.service.RpcClientProcessService;
 import xyz.redtorch.node.slave.rpc.service.RpcClientReqHandlerService;
 import xyz.redtorch.node.slave.rpc.service.RpcClientRspHandlerService;
@@ -46,7 +46,7 @@ import xyz.redtorch.pb.Dep.DataExchangeProtocol.RpcType;
 @Service
 public class RpcClientProcessServiceImpl implements RpcClientProcessService, InitializingBean {
 
-	private Logger logger = LoggerFactory.getLogger(RpcClientProcessServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(RpcClientProcessServiceImpl.class);
 
 	@Value("${rt.rpc.client.node-id}")
 	private int nodeId;
@@ -103,7 +103,7 @@ public class RpcClientProcessServiceImpl implements RpcClientProcessService, Ini
 		if (contentType == ContentType.COMPRESSED_LZ4) {
 			try (InputStream in = new ByteArrayInputStream(dep.getContentBytes().toByteArray());
 					BufferedInputStream bin = new BufferedInputStream(in);
-					FramedLZ4CompressorInputStream zIn = new FramedLZ4CompressorInputStream(bin);) {
+					LZ4FrameInputStream zIn = new LZ4FrameInputStream(bin);) {
 
 				contentByteString = ByteString.readFrom(zIn);
 			} catch (Exception e) {
@@ -419,9 +419,16 @@ public class RpcClientProcessServiceImpl implements RpcClientProcessService, Ini
 		sendRoutineCoreRpc(targetNodeId, content, originalReqId, RpcId.EXCEPTION_RSP);
 	}
 
-	public boolean sendRoutineCoreRpc(int targetNodeId, ByteString content, String reqId, RpcId rpcId) {
+	public boolean sendCoreRpc(int targetNodeId, ByteString content, String reqId, RpcId rpcId) {
 		logger.info("发送RPC记录,目标节点ID:{},请求ID:{},RPC:{}", targetNodeId, reqId, rpcId.getValueDescriptor().getName());
-
+		if(content.size()>262144) {
+			return sendLz4CoreRpc(targetNodeId, content, reqId, rpcId);
+		}else {
+			return sendRoutineCoreRpc(targetNodeId, content, reqId, rpcId);
+		}
+	}
+	
+	public boolean sendRoutineCoreRpc(int targetNodeId, ByteString content, String reqId, RpcId rpcId) {
 		DataExchangeProtocol.Builder depBuilder = DataExchangeProtocol.newBuilder() //
 				.setRpcId(rpcId.getNumber()) //
 				.setReqId(reqId) //
@@ -439,13 +446,12 @@ public class RpcClientProcessServiceImpl implements RpcClientProcessService, Ini
 	}
 
 	public boolean sendLz4CoreRpc(int targetNodeId, ByteString content, String reqId, RpcId rpcId) {
-		logger.info("发送RPC记录,目标节点ID:{},请求ID:{},RPC:{}", targetNodeId, reqId, rpcId.getValueDescriptor().getName());
-
 		ByteString contentByteString = ByteString.EMPTY;
+		long beginTime = System.currentTimeMillis();
 		try (InputStream in = new ByteArrayInputStream(content.toByteArray());
 				ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-				FramedLZ4CompressorOutputStream lzOut = new FramedLZ4CompressorOutputStream(bOut);) {
-			final byte[] buffer = new byte[2048];
+				LZ4FrameOutputStream  lzOut = new LZ4FrameOutputStream (bOut);) {
+			final byte[] buffer = new byte[10240];
 			int n = 0;
 			while (-1 != (n = in.read(buffer))) {
 			    lzOut.write(buffer, 0, n);
@@ -453,6 +459,7 @@ public class RpcClientProcessServiceImpl implements RpcClientProcessService, Ini
 			lzOut.close();
 			in.close();
 			contentByteString = ByteString.copyFrom(bOut.toByteArray());
+			logger.info("发送RPC记录,目标节点ID:{},请求ID:{},RPC:{},压缩耗时{}ms,原始数据大小{},压缩后数据大小{},压缩率{}", targetNodeId, reqId, rpcId.getValueDescriptor().getName(),System.currentTimeMillis()-beginTime,content.size(),contentByteString.size(),contentByteString.size()/(double)content.size());
 		} catch (Exception e) {
 			logger.error("发送RPC错误,压缩异常,目标节点ID:{},请求ID:{},RPC:{}", targetNodeId, reqId, rpcId.getValueDescriptor().getName(), e);
 			return false;

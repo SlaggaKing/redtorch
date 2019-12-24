@@ -46,4 +46,10 @@ public class RpcClientProcessServiceImplTest implements RpcClientProcessService 
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public boolean sendCoreRpc(int targetNodeId, ByteString content, String reqId, RpcId rpcId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

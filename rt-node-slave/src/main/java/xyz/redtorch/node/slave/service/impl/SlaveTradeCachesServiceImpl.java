@@ -193,7 +193,7 @@ public class SlaveTradeCachesServiceImpl extends FastEventDynamicHandlerAbstract
 							RpcContractListRtn.Builder rpcContractListRtnBuilder = RpcContractListRtn.newBuilder();
 							rpcContractListRtnBuilder.setCommonRtn(commonRtn);
 							rpcContractListRtnBuilder.addAllContract(contractFieldList);
-							rpcClientProcessService.sendRoutineCoreRpc(0, rpcContractListRtnBuilder.build().toByteString(), "", RpcId.CONTRACT_LIST_RTN);
+							rpcClientProcessService.sendCoreRpc(0, rpcContractListRtnBuilder.build().toByteString(), "", RpcId.CONTRACT_LIST_RTN);
 							lastTimestamp = System.currentTimeMillis();
 							contractFieldList = new ArrayList<>();
 						}
@@ -224,7 +224,7 @@ public class SlaveTradeCachesServiceImpl extends FastEventDynamicHandlerAbstract
 							RpcPositionListRtn.Builder rpcPositionListRtnBuilder = RpcPositionListRtn.newBuilder();
 							rpcPositionListRtnBuilder.setCommonRtn(commonRtn);
 							rpcPositionListRtnBuilder.addAllPosition(positionList);
-							rpcClientProcessService.sendRoutineCoreRpc(0, rpcPositionListRtnBuilder.build().toByteString(), "", RpcId.POSITION_LIST_RTN);
+							rpcClientProcessService.sendCoreRpc(0, rpcPositionListRtnBuilder.build().toByteString(), "", RpcId.POSITION_LIST_RTN);
 							lastTimestamp = System.currentTimeMillis();
 							positionList = new ArrayList<>();
 						}
@@ -312,7 +312,7 @@ public class SlaveTradeCachesServiceImpl extends FastEventDynamicHandlerAbstract
 		RpcNoticeRtn.Builder rpcNoticeRtnBuilder = RpcNoticeRtn.newBuilder();
 		rpcNoticeRtnBuilder.setCommonRtn(commonRtn);
 		rpcNoticeRtnBuilder.setNotice(notice);
-		rpcClientProcessService.sendRoutineCoreRpc(0, rpcNoticeRtnBuilder.build().toByteString(), "", RpcId.NOTICE_RTN);
+		rpcClientProcessService.sendCoreRpc(0, rpcNoticeRtnBuilder.build().toByteString(), "", RpcId.NOTICE_RTN);
 	}
 
 	private void onAccount(AccountField account) {
@@ -320,7 +320,7 @@ public class SlaveTradeCachesServiceImpl extends FastEventDynamicHandlerAbstract
 		RpcAccountRtn.Builder rpcAccountRtnBuilder = RpcAccountRtn.newBuilder();
 		rpcAccountRtnBuilder.setCommonRtn(commonRtn);
 		rpcAccountRtnBuilder.setAccount(account);
-		rpcClientProcessService.sendRoutineCoreRpc(0, rpcAccountRtnBuilder.build().toByteString(), "", RpcId.ACCOUNT_RTN);
+		rpcClientProcessService.sendCoreRpc(0, rpcAccountRtnBuilder.build().toByteString(), "", RpcId.ACCOUNT_RTN);
 
 		accountMapLock.lock();
 		try {
@@ -337,7 +337,7 @@ public class SlaveTradeCachesServiceImpl extends FastEventDynamicHandlerAbstract
 		RpcOrderRtn.Builder rpcOrderRtnBuilder = RpcOrderRtn.newBuilder();
 		rpcOrderRtnBuilder.setCommonRtn(commonRtn);
 		rpcOrderRtnBuilder.setOrder(order);
-		rpcClientProcessService.sendRoutineCoreRpc(0, rpcOrderRtnBuilder.build().toByteString(), "", RpcId.ORDER_RTN);
+		rpcClientProcessService.sendCoreRpc(0, rpcOrderRtnBuilder.build().toByteString(), "", RpcId.ORDER_RTN);
 
 		orderMapLock.lock();
 		try {
@@ -357,7 +357,7 @@ public class SlaveTradeCachesServiceImpl extends FastEventDynamicHandlerAbstract
 		RpcTradeRtn.Builder rpcTradeRtnBuilder = RpcTradeRtn.newBuilder();
 		rpcTradeRtnBuilder.setCommonRtn(commonRtn);
 		rpcTradeRtnBuilder.setTrade(trade);
-		rpcClientProcessService.sendRoutineCoreRpc(0, rpcTradeRtnBuilder.build().toByteString(), "", RpcId.TRADE_RTN);
+		rpcClientProcessService.sendCoreRpc(0, rpcTradeRtnBuilder.build().toByteString(), "", RpcId.TRADE_RTN);
 
 		tradeMapLock.lock();
 		try {
@@ -374,7 +374,7 @@ public class SlaveTradeCachesServiceImpl extends FastEventDynamicHandlerAbstract
 //		RpcPositionRtn.Builder rpcPositionRtnBuilder = RpcPositionRtn.newBuilder();
 //		rpcPositionRtnBuilder.setCommonRtn(commonRtn);
 //		rpcPositionRtnBuilder.setPosition(position);
-//		rpcClientProcessService.sendRoutineCoreRpc(0, rpcPositionRtnBuilder.build().toByteString(), "",
+//		rpcClientProcessService.sendCoreRpc(0, rpcPositionRtnBuilder.build().toByteString(), "",
 //				RpcId.POSITION_RTN);
 
 		positionQueue.add(position);
@@ -394,7 +394,7 @@ public class SlaveTradeCachesServiceImpl extends FastEventDynamicHandlerAbstract
 		RpcTickRtn.Builder rpcTickRtnBuilder = RpcTickRtn.newBuilder();
 		rpcTickRtnBuilder.setCommonRtn(commonRtn);
 		rpcTickRtnBuilder.setTick(tick);
-		rpcClientProcessService.sendRoutineCoreRpc(0, rpcTickRtnBuilder.build().toByteString(), "", RpcId.TICK_RTN);
+		rpcClientProcessService.sendCoreRpc(0, rpcTickRtnBuilder.build().toByteString(), "", RpcId.TICK_RTN);
 
 		tickMapLock.lock();
 		try {
@@ -411,7 +411,7 @@ public class SlaveTradeCachesServiceImpl extends FastEventDynamicHandlerAbstract
 //		RpcContractRtn.Builder rpcContractRtnBuilder = RpcContractRtn.newBuilder();
 //		rpcContractRtnBuilder.setCommonRtn(commonRtn);
 //		rpcContractRtnBuilder.setContract(contract);
-//		rpcClientProcessService.sendRoutineCoreRpc(0, rpcContractRtnBuilder.build().toByteString(), "",
+//		rpcClientProcessService.sendCoreRpc(0, rpcContractRtnBuilder.build().toByteString(), "",
 //				RpcId.CONTRACT_RTN);
 
 		contractQueue.add(contract);

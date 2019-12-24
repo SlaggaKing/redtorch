@@ -8,8 +8,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.compress.compressors.lz4.FramedLZ4CompressorInputStream;
-import org.apache.commons.compress.compressors.lz4.FramedLZ4CompressorOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +19,8 @@ import org.springframework.stereotype.Service;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import net.jpountz.lz4.LZ4FrameInputStream;
+import net.jpountz.lz4.LZ4FrameOutputStream;
 import xyz.redtorch.common.service.RpcClientProcessService;
 import xyz.redtorch.desktop.layout.base.MainLayout;
 import xyz.redtorch.desktop.rpc.service.RpcClientRspHandlerService;
@@ -64,7 +64,7 @@ import xyz.redtorch.pb.Dep.DataExchangeProtocol.RpcType;
 @Service
 public class RpcClientProcessServiceImpl implements RpcClientProcessService, InitializingBean {
 
-	private Logger logger = LoggerFactory.getLogger(RpcClientProcessServiceImpl.class);
+	private static final Logger logger = LoggerFactory.getLogger(RpcClientProcessServiceImpl.class);
 
 	@Autowired
 	private AuthService authService;
@@ -120,14 +120,13 @@ public class RpcClientProcessServiceImpl implements RpcClientProcessService, Ini
 		String rpcTypeValueName = rpcType.getValueDescriptor().getName();
 		String reqId = dep.getReqId();
 
-		logger.info("处理DEP记录,来源节点ID:{},RPC类型:{},RPC ID:{},请求ID:{}内容类型:{},时间戳:{}", sourceNodeId, rpcTypeValueName, rpcId, reqId, contentTypeValueName,
-				timestamp);
+		logger.info("处理DEP记录,来源节点ID:{},RPC类型:{},RPC ID:{},请求ID:{}内容类型:{},时间戳:{}", sourceNodeId, rpcTypeValueName, rpcId, reqId, contentTypeValueName, timestamp);
 
 		ByteString contentByteString;
 		if (contentType == ContentType.COMPRESSED_LZ4) {
 			try (InputStream in = new ByteArrayInputStream(dep.getContentBytes().toByteArray());
 					BufferedInputStream bin = new BufferedInputStream(in);
-					FramedLZ4CompressorInputStream zIn = new FramedLZ4CompressorInputStream(bin);) {
+					LZ4FrameInputStream zIn = new LZ4FrameInputStream(bin);) {
 
 				contentByteString = ByteString.readFrom(zIn);
 			} catch (Exception e) {
@@ -138,22 +137,19 @@ public class RpcClientProcessServiceImpl implements RpcClientProcessService, Ini
 		} else if (contentType == ContentType.ROUTINE) {
 			contentByteString = dep.getContentBytes();
 		} else {
-			logger.error("处理DEP错误，来源节点ID:{},RPC类型:{},RPC ID:{},请求ID:{}内容类型:{},时间戳:{},不支持的报文类型", sourceNodeId, rpcTypeValueName, rpcId, reqId,
-					contentTypeValueName, timestamp);
+			logger.error("处理DEP错误，来源节点ID:{},RPC类型:{},RPC ID:{},请求ID:{}内容类型:{},时间戳:{},不支持的报文类型", sourceNodeId, rpcTypeValueName, rpcId, reqId, contentTypeValueName, timestamp);
 			sendExceptionRsp(sourceNodeId, rpcId, reqId, timestamp, "不支持的报文类型");
 			return;
 		}
 
 		if (contentByteString == null || contentByteString.size() <= 0) {
-			logger.error("处理DEP错误，来源节点ID:{},RPC类型:{},RPC ID:{},请求ID:{}内容类型:{},时间戳:{},报文内容长度错误", sourceNodeId, rpcTypeValueName, rpcId, contentTypeValueName,
-					timestamp);
+			logger.error("处理DEP错误，来源节点ID:{},RPC类型:{},RPC ID:{},请求ID:{}内容类型:{},时间戳:{},报文内容长度错误", sourceNodeId, rpcTypeValueName, rpcId, contentTypeValueName, timestamp);
 			sendExceptionRsp(sourceNodeId, rpcId, reqId, timestamp, "报文内容长度错误");
 			return;
 		}
 
 		if (dep.getRpcType() != RpcType.CORE_RPC) {
-			logger.error("处理DEP错误，来源节点ID:{},RPC类型:{},RPC ID:{},请求ID:{}内容类型:{},时间戳:{},未能识别的RPC类型", sourceNodeId, rpcTypeValueName, rpcId, reqId,
-					contentTypeValueName, timestamp);
+			logger.error("处理DEP错误，来源节点ID:{},RPC类型:{},RPC ID:{},请求ID:{}内容类型:{},时间戳:{},未能识别的RPC类型", sourceNodeId, rpcTypeValueName, rpcId, reqId, contentTypeValueName, timestamp);
 			return;
 		}
 
@@ -262,7 +258,7 @@ public class RpcClientProcessServiceImpl implements RpcClientProcessService, Ini
 					try {
 						RpcGetContractListRsp rpcGetContractListRsp = RpcGetContractListRsp.parseFrom(contentByteString);
 						checkCommonRsp(rpcGetContractListRsp.getCommonRsp(), sourceNodeId, reqId);
-						logger.info("处理RPC记录,来源节点ID:{},请求ID:{},GET_CONTRACT_LIST_RSP", sourceNodeId, reqId);
+						logger.info("处理RPC记录,来源节点ID:{},请求ID:{},RPC:GET_CONTRACT_LIST_RSP", sourceNodeId, reqId);
 						rpcClientRspHandlerService.onGetContractListRsp(rpcGetContractListRsp);
 					} catch (Exception e) {
 						logger.error("处理RPC异常,来源节点ID:{},RPC:GET_CONTRACT_LIST_RSP", sourceNodeId, e);
@@ -279,7 +275,7 @@ public class RpcClientProcessServiceImpl implements RpcClientProcessService, Ini
 					try {
 						RpcGetMixContractListRsp rpcGetMixContractListRsp = RpcGetMixContractListRsp.parseFrom(contentByteString);
 						checkCommonRsp(rpcGetMixContractListRsp.getCommonRsp(), sourceNodeId, reqId);
-						logger.info("处理RPC记录,来源节点ID:{},请求ID:{},GET_MIX_CONTRACT_LIST_RSP", sourceNodeId, reqId);
+						logger.info("处理RPC记录,来源节点ID:{},请求ID:{},RPC:GET_MIX_CONTRACT_LIST_RSP", sourceNodeId, reqId);
 						rpcClientRspHandlerService.onGetMixContractListRsp(rpcGetMixContractListRsp);
 					} catch (Exception e) {
 						logger.error("处理RPC异常,来源节点ID:{},RPC:GET_MIX_CONTRACT_LIST_RSP", sourceNodeId, e);
@@ -296,7 +292,7 @@ public class RpcClientProcessServiceImpl implements RpcClientProcessService, Ini
 					try {
 						RpcGetTickListRsp rpcGetTickListRsp = RpcGetTickListRsp.parseFrom(contentByteString);
 						checkCommonRsp(rpcGetTickListRsp.getCommonRsp(), sourceNodeId, reqId);
-						logger.info("处理RPC记录,来源节点ID:{},请求ID:{},GET_TICK_LIST_RSP", sourceNodeId, reqId);
+						logger.info("处理RPC记录,来源节点ID:{},请求ID:{},RPC:GET_TICK_LIST_RSP", sourceNodeId, reqId);
 						rpcClientRspHandlerService.onGetTickListRsp(rpcGetTickListRsp);
 					} catch (Exception e) {
 						logger.error("处理RPC异常,来源节点ID:{},RPC:GET_TICK_LIST_RSP", sourceNodeId, e);
@@ -313,7 +309,7 @@ public class RpcClientProcessServiceImpl implements RpcClientProcessService, Ini
 					try {
 						RpcGetPositionListRsp rpcGetPositionListRsp = RpcGetPositionListRsp.parseFrom(contentByteString);
 						checkCommonRsp(rpcGetPositionListRsp.getCommonRsp(), sourceNodeId, reqId);
-						logger.info("处理RPC记录,来源节点ID:{},请求ID:{},GET_POSITION_LIST_RSP", sourceNodeId, reqId);
+						logger.info("处理RPC记录,来源节点ID:{},请求ID:{},RPC:GET_POSITION_LIST_RSP", sourceNodeId, reqId);
 						rpcClientRspHandlerService.onGetPositionListRsp(rpcGetPositionListRsp);
 					} catch (Exception e) {
 						logger.error("处理RPC异常,来源节点ID:{},RPC:GET_POSITION_LIST_RSP", sourceNodeId, e);
@@ -330,7 +326,7 @@ public class RpcClientProcessServiceImpl implements RpcClientProcessService, Ini
 					try {
 						RpcGetAccountListRsp rpcGetAccountListRsp = RpcGetAccountListRsp.parseFrom(contentByteString);
 						checkCommonRsp(rpcGetAccountListRsp.getCommonRsp(), sourceNodeId, reqId);
-						logger.info("处理RPC记录,来源节点ID:{},请求ID:{},GET_ACCOUNT_LIST_RSP", sourceNodeId, reqId);
+						logger.info("处理RPC记录,来源节点ID:{},请求ID:{},RPC:GET_ACCOUNT_LIST_RSP", sourceNodeId, reqId);
 						rpcClientRspHandlerService.onGetAccountListRsp(rpcGetAccountListRsp);
 					} catch (Exception e) {
 						logger.error("处理RPC异常,来源节点ID:{},RPC:GET_ACCOUNT_LIST_RSP", sourceNodeId, e);
@@ -347,7 +343,7 @@ public class RpcClientProcessServiceImpl implements RpcClientProcessService, Ini
 					try {
 						RpcGetTradeListRsp rpcGetTradeListRsp = RpcGetTradeListRsp.parseFrom(contentByteString);
 						checkCommonRsp(rpcGetTradeListRsp.getCommonRsp(), sourceNodeId, reqId);
-						logger.info("处理RPC记录,来源节点ID:{},请求ID:{},GET_TRADE_LIST_RSP", sourceNodeId, reqId);
+						logger.info("处理RPC记录,来源节点ID:{},请求ID:{},RPC:GET_TRADE_LIST_RSP", sourceNodeId, reqId);
 						rpcClientRspHandlerService.onGetTradeListRsp(rpcGetTradeListRsp);
 					} catch (Exception e) {
 						logger.error("处理RPC异常,来源节点ID:{},RPC:GET_TRADE_LIST_RSP", sourceNodeId, e);
@@ -364,7 +360,7 @@ public class RpcClientProcessServiceImpl implements RpcClientProcessService, Ini
 					try {
 						RpcGetOrderListRsp rpcGetOrderListRsp = RpcGetOrderListRsp.parseFrom(contentByteString);
 						checkCommonRsp(rpcGetOrderListRsp.getCommonRsp(), sourceNodeId, reqId);
-						logger.info("处理RPC记录,来源节点ID:{},请求ID:{},GET_ORDER_LIST_RSP", sourceNodeId, reqId);
+						logger.info("处理RPC记录,来源节点ID:{},请求ID:{},RPC:GET_ORDER_LIST_RSP", sourceNodeId, reqId);
 						rpcClientRspHandlerService.onGetOrderListRsp(rpcGetOrderListRsp);
 					} catch (Exception e) {
 						logger.error("处理RPC异常,来源节点ID:{},RPC:GET_ORDER_LIST_RSP", sourceNodeId, e);
@@ -390,7 +386,6 @@ public class RpcClientProcessServiceImpl implements RpcClientProcessService, Ini
 			});
 			break;
 		}
-
 		// ------------------------------------------------------------------------------------------------------------
 		case RpcId.ORDER_RTN_VALUE: {
 			tradeRtnQueueSingleThreadExecutorService.execute(new Runnable() {
@@ -676,9 +671,16 @@ public class RpcClientProcessServiceImpl implements RpcClientProcessService, Ini
 		sendRoutineCoreRpc(targetNodeId, content, originalReqId, RpcId.EXCEPTION_RSP);
 	}
 
-	public boolean sendRoutineCoreRpc(int targetNodeId, ByteString content, String reqId, RpcId rpcId) {
+	public boolean sendCoreRpc(int targetNodeId, ByteString content, String reqId, RpcId rpcId) {
 		logger.info("发送RPC记录,目标节点ID:{},请求ID:{},RPC:{}", targetNodeId, reqId, rpcId.getValueDescriptor().getName());
+		if(content.size()>262144) {
+			return sendLz4CoreRpc(targetNodeId, content, reqId, rpcId);
+		}else {
+			return sendRoutineCoreRpc(targetNodeId, content, reqId, rpcId);
+		}
+	}
 
+	public boolean sendRoutineCoreRpc(int targetNodeId, ByteString content, String reqId, RpcId rpcId) {
 		DataExchangeProtocol.Builder depBuilder = DataExchangeProtocol.newBuilder() //
 				.setRpcId(rpcId.getNumber()) //
 				.setReqId(reqId) //
@@ -696,20 +698,20 @@ public class RpcClientProcessServiceImpl implements RpcClientProcessService, Ini
 	}
 
 	public boolean sendLz4CoreRpc(int targetNodeId, ByteString content, String reqId, RpcId rpcId) {
-		logger.info("发送RPC记录,目标节点ID:{},请求ID:{},RPC:{}", targetNodeId, reqId, rpcId.getValueDescriptor().getName());
-
 		ByteString contentByteString = ByteString.EMPTY;
+		long beginTime = System.currentTimeMillis();
 		try (InputStream in = new ByteArrayInputStream(content.toByteArray());
 				ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-				FramedLZ4CompressorOutputStream lzOut = new FramedLZ4CompressorOutputStream(bOut);) {
-			final byte[] buffer = new byte[2048];
+				LZ4FrameOutputStream  lzOut = new LZ4FrameOutputStream (bOut);) {
+			final byte[] buffer = new byte[10240];
 			int n = 0;
 			while (-1 != (n = in.read(buffer))) {
-				lzOut.write(buffer, 0, n);
+			    lzOut.write(buffer, 0, n);
 			}
 			lzOut.close();
 			in.close();
 			contentByteString = ByteString.copyFrom(bOut.toByteArray());
+			logger.info("发送RPC记录,目标节点ID:{},请求ID:{},RPC:{},压缩耗时{}ms,原始数据大小{},压缩后数据大小{},压缩率{}", targetNodeId, reqId, rpcId.getValueDescriptor().getName(),System.currentTimeMillis()-beginTime,content.size(),contentByteString.size(),contentByteString.size()/(double)content.size());
 		} catch (Exception e) {
 			logger.error("发送RPC错误,压缩异常,目标节点ID:{},请求ID:{},RPC:{}", targetNodeId, reqId, rpcId.getValueDescriptor().getName(), e);
 			return false;

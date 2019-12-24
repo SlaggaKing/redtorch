@@ -120,10 +120,10 @@ public class MasterTradeRtnRelayServiceImpl implements MasterTradeRtnRelayServic
 											@Override
 											public void run() {
 												if(filteredPositionList.size()>3) {
-													rpcServerProcessService.sendLz4CoreRpc(rtnTargetNodeId, rpcPositionRtnBuilder.build().toByteString(), "",
+													rpcServerProcessService.sendCoreRpc(rtnTargetNodeId, rpcPositionRtnBuilder.build().toByteString(), "",
 															RpcId.POSITION_LIST_RTN);
 												}else {
-													rpcServerProcessService.sendRoutineCoreRpc(rtnTargetNodeId, rpcPositionRtnBuilder.build().toByteString(), "",
+													rpcServerProcessService.sendCoreRpc(rtnTargetNodeId, rpcPositionRtnBuilder.build().toByteString(), "",
 															RpcId.POSITION_LIST_RTN);
 												}
 											}
@@ -203,10 +203,10 @@ public class MasterTradeRtnRelayServiceImpl implements MasterTradeRtnRelayServic
 											@Override
 											public void run() {
 												if(filteredAccountList.size()>3) {
-													rpcServerProcessService.sendLz4CoreRpc(rtnTargetNodeId, rpcAccountRtnBuilder.build().toByteString(), "",
+													rpcServerProcessService.sendCoreRpc(rtnTargetNodeId, rpcAccountRtnBuilder.build().toByteString(), "",
 															RpcId.ACCOUNT_LIST_RTN);
 												}else {
-													rpcServerProcessService.sendRoutineCoreRpc(rtnTargetNodeId, rpcAccountRtnBuilder.build().toByteString(), "",
+													rpcServerProcessService.sendCoreRpc(rtnTargetNodeId, rpcAccountRtnBuilder.build().toByteString(), "",
 															RpcId.ACCOUNT_LIST_RTN);
 												}
 											}
@@ -271,7 +271,7 @@ public class MasterTradeRtnRelayServiceImpl implements MasterTradeRtnRelayServic
 					tradeRtnQueueSingleExecutorService.execute(new Runnable() {
 						@Override
 						public void run() {
-							rpcServerProcessService.sendRoutineCoreRpc(rtnTargetNodeId, rpcOrderRtnBuilder.build().toByteString(), "", RpcId.ORDER_RTN);
+							rpcServerProcessService.sendCoreRpc(rtnTargetNodeId, rpcOrderRtnBuilder.build().toByteString(), "", RpcId.ORDER_RTN);
 							
 						}
 					});
@@ -315,7 +315,7 @@ public class MasterTradeRtnRelayServiceImpl implements MasterTradeRtnRelayServic
 					tradeRtnQueueSingleExecutorService.execute(new Runnable() {
 						@Override
 						public void run() {
-							rpcServerProcessService.sendRoutineCoreRpc(rtnTargetNodeId, rpcTradeRtnBuilder.build().toByteString(), "", RpcId.TRADE_RTN);
+							rpcServerProcessService.sendCoreRpc(rtnTargetNodeId, rpcTradeRtnBuilder.build().toByteString(), "", RpcId.TRADE_RTN);
 						}
 					});
 				}
@@ -346,7 +346,7 @@ public class MasterTradeRtnRelayServiceImpl implements MasterTradeRtnRelayServic
 			marketRtnQueueSingleExecutorService.execute(new Runnable() {
 				@Override
 				public void run() {
-					rpcServerProcessService.sendRoutineCoreRpc(rtnTargetNodeId, rpcTickRtnBuilder.build().toByteString(), "", RpcId.TICK_RTN);
+					rpcServerProcessService.sendCoreRpc(rtnTargetNodeId, rpcTickRtnBuilder.build().toByteString(), "", RpcId.TICK_RTN);
 					
 				}
 			});
@@ -410,7 +410,7 @@ public class MasterTradeRtnRelayServiceImpl implements MasterTradeRtnRelayServic
 			marketRtnQueueSingleExecutorService.execute(new Runnable() {
 				@Override
 				public void run() {
-					rpcServerProcessService.sendRoutineCoreRpc(rtnTargetNodeId, rpcTickRtnBuilder.build().toByteString(), "", RpcId.TICK_RTN);
+					rpcServerProcessService.sendCoreRpc(rtnTargetNodeId, rpcTickRtnBuilder.build().toByteString(), "", RpcId.TICK_RTN);
 					
 				}
 			});
@@ -454,7 +454,7 @@ public class MasterTradeRtnRelayServiceImpl implements MasterTradeRtnRelayServic
 //					rpcAccountRtnBuilder.setCommonRtn(commonRtnBuilder);
 //					rpcAccountRtnBuilder.setAccount(account);
 //
-//					rpcServerProcessService.sendRoutineCoreRpc(rtnTargetNodeId,
+//					rpcServerProcessService.sendCoreRpc(rtnTargetNodeId,
 //							rpcAccountRtnBuilder.build().toByteString(), "", RpcId.ACCOUNT_RTN);
 //				}
 //			}
@@ -496,7 +496,7 @@ public class MasterTradeRtnRelayServiceImpl implements MasterTradeRtnRelayServic
 //					rpcPositionRtnBuilder.setCommonRtn(commonRtnBuilder);
 //					rpcPositionRtnBuilder.setPosition(position);
 //
-//					rpcServerProcessService.sendRoutineCoreRpc(rtnTargetNodeId,
+//					rpcServerProcessService.sendCoreRpc(rtnTargetNodeId,
 //							rpcPositionRtnBuilder.build().toByteString(), "", RpcId.POSITION_RTN);
 //				}
 //			}
@@ -531,7 +531,7 @@ public class MasterTradeRtnRelayServiceImpl implements MasterTradeRtnRelayServic
 					cachedThreadPoolService.execute(new Runnable() {
 						@Override
 						public void run() {
-							rpcServerProcessService.sendRoutineCoreRpc(rtnTargetNodeId, rpcNoticeRtnBuilder.build().toByteString(), "", RpcId.NOTICE_RTN);
+							rpcServerProcessService.sendCoreRpc(rtnTargetNodeId, rpcNoticeRtnBuilder.build().toByteString(), "", RpcId.NOTICE_RTN);
 							
 						}
 					});
@@ -585,7 +585,7 @@ public class MasterTradeRtnRelayServiceImpl implements MasterTradeRtnRelayServic
 					tradeRtnQueueSingleExecutorService.execute(new Runnable() {
 						@Override
 						public void run() {
-							rpcServerProcessService.sendRoutineCoreRpc(rtnTargetNodeId, rpcOrderRtnBuilder.build().toByteString(), "", RpcId.ORDER_LIST_RTN);
+							rpcServerProcessService.sendCoreRpc(rtnTargetNodeId, rpcOrderRtnBuilder.build().toByteString(), "", RpcId.ORDER_LIST_RTN);
 						}
 					});
 
@@ -638,7 +638,7 @@ public class MasterTradeRtnRelayServiceImpl implements MasterTradeRtnRelayServic
 					tradeRtnQueueSingleExecutorService.execute(new Runnable() {
 						@Override
 						public void run() {
-							rpcServerProcessService.sendRoutineCoreRpc(rtnTargetNodeId, rpcTradeRtnBuilder.build().toByteString(), "", RpcId.TRADE_LIST_RTN);
+							rpcServerProcessService.sendCoreRpc(rtnTargetNodeId, rpcTradeRtnBuilder.build().toByteString(), "", RpcId.TRADE_LIST_RTN);
 						}
 					});
 				}
@@ -696,7 +696,7 @@ public class MasterTradeRtnRelayServiceImpl implements MasterTradeRtnRelayServic
 //					rpcPositionRtnBuilder.setCommonRtn(commonRtnBuilder);
 //					rpcPositionRtnBuilder.addAllPosition(filteredPositionList);
 //
-//					rpcServerProcessService.sendRoutineCoreRpc(rtnTargetNodeId,
+//					rpcServerProcessService.sendCoreRpc(rtnTargetNodeId,
 //							rpcPositionRtnBuilder.build().toByteString(), "", RpcId.POSITION_LIST_RTN);
 //				}
 //			}
@@ -746,7 +746,7 @@ public class MasterTradeRtnRelayServiceImpl implements MasterTradeRtnRelayServic
 //					rpcAccountRtnBuilder.setCommonRtn(commonRtnBuilder);
 //					rpcAccountRtnBuilder.addAllAccount(filteredAccountList);
 //
-//					rpcServerProcessService.sendRoutineCoreRpc(rtnTargetNodeId,
+//					rpcServerProcessService.sendCoreRpc(rtnTargetNodeId,
 //							rpcAccountRtnBuilder.build().toByteString(), "", RpcId.ACCOUNT_LIST_RTN);
 //				}
 //			}

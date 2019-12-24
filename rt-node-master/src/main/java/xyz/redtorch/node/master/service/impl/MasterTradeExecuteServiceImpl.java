@@ -136,7 +136,7 @@ public class MasterTradeExecuteServiceImpl implements MasterTradeExecuteService 
 				}
 
 				RpcSubscribeRsp.Builder rpcSubscribeRspBuilder = RpcSubscribeRsp.newBuilder().setCommonRsp(commonRspBuilder);
-				rpcServerProcessService.sendRoutineCoreRpc(rspTargetNodeId, rpcSubscribeRspBuilder.build().toByteString(), commonReq.getReqId(),
+				rpcServerProcessService.sendCoreRpc(rspTargetNodeId, rpcSubscribeRspBuilder.build().toByteString(), commonReq.getReqId(),
 						RpcId.SUBSCRIBE_RSP);
 			} catch (Exception e) {
 				throw e;
@@ -201,7 +201,7 @@ public class MasterTradeExecuteServiceImpl implements MasterTradeExecuteService 
 				}
 
 				RpcUnsubscribeRsp.Builder rpcUnsubscribeRspBuilder = RpcUnsubscribeRsp.newBuilder().setCommonRsp(commonRspBuilder);
-				rpcServerProcessService.sendRoutineCoreRpc(rspTargetNodeId, rpcUnsubscribeRspBuilder.build().toByteString(), commonReq.getReqId(),
+				rpcServerProcessService.sendCoreRpc(rspTargetNodeId, rpcUnsubscribeRspBuilder.build().toByteString(), commonReq.getReqId(),
 						RpcId.UNSUBSCRIBE_RSP);
 			} catch (Exception e) {
 				throw e;
@@ -333,7 +333,7 @@ public class MasterTradeExecuteServiceImpl implements MasterTradeExecuteService 
 			}
 
 			rpcSubmitOrderRsp.setCommonRsp(commonRspBuilder);
-			rpcServerProcessService.sendRoutineCoreRpc(rspTargetNodeId, rpcSubmitOrderRsp.build().toByteString(), reqId, RpcId.SUBMIT_ORDER_RSP);
+			rpcServerProcessService.sendCoreRpc(rspTargetNodeId, rpcSubmitOrderRsp.build().toByteString(), reqId, RpcId.SUBMIT_ORDER_RSP);
 		}
 
 	}
@@ -436,7 +436,7 @@ public class MasterTradeExecuteServiceImpl implements MasterTradeExecuteService 
 			}
 
 			RpcCancelOrderRsp.Builder rpcCancelOrderRsp = RpcCancelOrderRsp.newBuilder().setCommonRsp(commonRspBuilder);
-			rpcServerProcessService.sendRoutineCoreRpc(rspTargetNodeId, rpcCancelOrderRsp.build().toByteString(), reqId, RpcId.CANCEL_ORDER_RSP);
+			rpcServerProcessService.sendCoreRpc(rspTargetNodeId, rpcCancelOrderRsp.build().toByteString(), reqId, RpcId.CANCEL_ORDER_RSP);
 		}
 	}
 
@@ -473,7 +473,7 @@ public class MasterTradeExecuteServiceImpl implements MasterTradeExecuteService 
 					.setRequestStatus(CommonStatusEnum.SUCCESS);
 
 			RpcSearchContractRsp.Builder rpcSearchContractRsp = RpcSearchContractRsp.newBuilder().setCommonRsp(commonRspBuilder);
-			rpcServerProcessService.sendRoutineCoreRpc(rspTargetNodeId, rpcSearchContractRsp.build().toByteString(), reqId, RpcId.SEARCH_CONTRACT_RSP);
+			rpcServerProcessService.sendCoreRpc(rspTargetNodeId, rpcSearchContractRsp.build().toByteString(), reqId, RpcId.SEARCH_CONTRACT_RSP);
 		}
 	}
 

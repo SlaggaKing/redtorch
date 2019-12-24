@@ -83,7 +83,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 				rpcSubscribeReqBuilder.setGatewayId(gatewayId);
 			}
 
-			return rpcClientProcessService.sendRoutineCoreRpc(0, rpcSubscribeReqBuilder.build().toByteString(), reqId, RpcId.SUBSCRIBE_REQ);
+			return rpcClientProcessService.sendCoreRpc(0, rpcSubscribeReqBuilder.build().toByteString(), reqId, RpcId.SUBSCRIBE_REQ);
 		}
 
 	}
@@ -180,7 +180,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 					.setContract(contract)//
 					.setGatewayId(gatewayId);
 
-			return rpcClientProcessService.sendRoutineCoreRpc(0, rpcUnsubscribeReqBuilder.build().toByteString(), reqId, RpcId.UNSUBSCRIBE_REQ);
+			return rpcClientProcessService.sendCoreRpc(0, rpcUnsubscribeReqBuilder.build().toByteString(), reqId, RpcId.UNSUBSCRIBE_REQ);
 
 		}
 
@@ -272,7 +272,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 					.setCommonReq(commonReqBuilder) //
 					.setSubmitOrderReq(submitOrderReq); //
 
-			return rpcClientProcessService.sendRoutineCoreRpc(0, rpcSubmitOrderReqBuilder.build().toByteString(), reqId, RpcId.SUBMIT_ORDER_REQ);
+			return rpcClientProcessService.sendCoreRpc(0, rpcSubmitOrderReqBuilder.build().toByteString(), reqId, RpcId.SUBMIT_ORDER_REQ);
 
 		}
 	}
@@ -361,7 +361,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 					.setCommonReq(commonReqBuilder) //
 					.setCancelOrderReq(cancelOrderReq);
 
-			return rpcClientProcessService.sendRoutineCoreRpc(0, rpcCancelOrderReqBuilder.build().toByteString(), reqId, RpcId.CANCEL_ORDER_REQ);
+			return rpcClientProcessService.sendCoreRpc(0, rpcCancelOrderReqBuilder.build().toByteString(), reqId, RpcId.CANCEL_ORDER_REQ);
 
 		}
 	}
@@ -449,7 +449,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 					.setCommonReq(commonReqBuilder) //
 					.setContract(contract);
 
-			return rpcClientProcessService.sendRoutineCoreRpc(0, rpcSearchContractReqBuilder.build().toByteString(), reqId, RpcId.SEARCH_CONTRACT_REQ);
+			return rpcClientProcessService.sendCoreRpc(0, rpcSearchContractReqBuilder.build().toByteString(), reqId, RpcId.SEARCH_CONTRACT_REQ);
 
 		}
 	}
@@ -534,7 +534,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 			RpcGetContractListReq.Builder rpcGetContractListReqBuilder = RpcGetContractListReq.newBuilder() //
 					.setCommonReq(commonReqBuilder);
 
-			return rpcClientProcessService.sendRoutineCoreRpc(0, rpcGetContractListReqBuilder.build().toByteString(), reqId, RpcId.GET_CONTRACT_LIST_REQ);
+			return rpcClientProcessService.sendCoreRpc(0, rpcGetContractListReqBuilder.build().toByteString(), reqId, RpcId.GET_CONTRACT_LIST_REQ);
 
 		}
 	}
@@ -617,7 +617,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 			RpcGetMixContractListReq.Builder rpcGetMixContractListReqBuilder = RpcGetMixContractListReq.newBuilder() //
 					.setCommonReq(commonReqBuilder);
 
-			return rpcClientProcessService.sendRoutineCoreRpc(0, rpcGetMixContractListReqBuilder.build().toByteString(), reqId,
+			return rpcClientProcessService.sendCoreRpc(0, rpcGetMixContractListReqBuilder.build().toByteString(), reqId,
 					RpcId.GET_MIX_CONTRACT_LIST_REQ);
 
 		}
@@ -701,7 +701,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 			RpcGetTickListReq.Builder rpcGetTickListReqBuilder = RpcGetTickListReq.newBuilder() //
 					.setCommonReq(commonReqBuilder);
 
-			return rpcClientProcessService.sendRoutineCoreRpc(0, rpcGetTickListReqBuilder.build().toByteString(), reqId, RpcId.GET_TICK_LIST_REQ);
+			return rpcClientProcessService.sendCoreRpc(0, rpcGetTickListReqBuilder.build().toByteString(), reqId, RpcId.GET_TICK_LIST_REQ);
 
 		}
 	}
@@ -784,7 +784,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 			RpcGetOrderListReq.Builder rpcGetOrderListReqBuilder = RpcGetOrderListReq.newBuilder() //
 					.setCommonReq(commonReqBuilder);
 
-			return rpcClientProcessService.sendRoutineCoreRpc(0, rpcGetOrderListReqBuilder.build().toByteString(), reqId, RpcId.GET_ORDER_LIST_REQ);
+			return rpcClientProcessService.sendCoreRpc(0, rpcGetOrderListReqBuilder.build().toByteString(), reqId, RpcId.GET_ORDER_LIST_REQ);
 
 		}
 	}
@@ -867,7 +867,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 			RpcGetPositionListReq.Builder rpcGetPositionListReqBuilder = RpcGetPositionListReq.newBuilder() //
 					.setCommonReq(commonReqBuilder);
 
-			return rpcClientProcessService.sendRoutineCoreRpc(0, rpcGetPositionListReqBuilder.build().toByteString(), reqId, RpcId.GET_POSITION_LIST_REQ);
+			return rpcClientProcessService.sendCoreRpc(0, rpcGetPositionListReqBuilder.build().toByteString(), reqId, RpcId.GET_POSITION_LIST_REQ);
 
 		}
 	}
@@ -950,7 +950,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 			RpcGetTradeListReq.Builder rpcGetTradeListReqBuilder = RpcGetTradeListReq.newBuilder() //
 					.setCommonReq(commonReqBuilder);
 
-			return rpcClientProcessService.sendRoutineCoreRpc(0, rpcGetTradeListReqBuilder.build().toByteString(), reqId, RpcId.GET_TRADE_LIST_REQ);
+			return rpcClientProcessService.sendCoreRpc(0, rpcGetTradeListReqBuilder.build().toByteString(), reqId, RpcId.GET_TRADE_LIST_REQ);
 		}
 	}
 
@@ -1032,7 +1032,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 			RpcGetAccountListReq.Builder rpcGetAccountListReqBuilder = RpcGetAccountListReq.newBuilder() //
 					.setCommonReq(commonReqBuilder);
 
-			return rpcClientProcessService.sendRoutineCoreRpc(0, rpcGetAccountListReqBuilder.build().toByteString(), reqId, RpcId.GET_ACCOUNT_LIST_REQ);
+			return rpcClientProcessService.sendCoreRpc(0, rpcGetAccountListReqBuilder.build().toByteString(), reqId, RpcId.GET_ACCOUNT_LIST_REQ);
 		}
 	}
 

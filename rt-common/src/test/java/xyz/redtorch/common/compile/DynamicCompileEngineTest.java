@@ -20,13 +20,13 @@ public class DynamicCompileEngineTest
         		"	public void processData(byte[] data) {\r\n" + 
         		"	}\r\n" + 
         		"	@Override\r\n" + 
-        		"	public boolean sendRoutineCoreRpc(int targetNodeId, ByteString content, String reqId, RpcId rpcId) {\r\n" + 
+        		"	public boolean sendCoreRpc(int targetNodeId, ByteString content, String reqId, RpcId rpcId) {\r\n" + 
         		"		System.out.println(\"RpcClientProcessServiceImplTest targetNodeId:\"+targetNodeId);\r\n" + 
         		"		System.out.println(\"RpcClientProcessServiceImplTest V_NUMBER:\"+V_NUMBER);\r\n" + 
         		"		return false;\r\n" + 
         		"	}\r\n" + 
         		"	@Override\r\n" + 
-        		"	public boolean sendLz4CoreRpc(int targetNodeId, ByteString content, String reqId, RpcId rpcId) {\r\n" + 
+        		"	public boolean sendCoreRpc(int targetNodeId, ByteString content, String reqId, RpcId rpcId) {\r\n" + 
         		"		return false;\r\n" + 
         		"	}\r\n" + 
         		"}\r\n" + 
@@ -41,7 +41,7 @@ public class DynamicCompileEngineTest
                 RpcClientProcessService rcps = (RpcClientProcessService)clazz.getDeclaredConstructor().newInstance();
                 Map<String,Object> param = new HashMap<>();
                 param.put("key",i);
-                rcps.sendRoutineCoreRpc(3232, null, "", null);
+                rcps.sendCoreRpc(3232, null, "", null);
                 
             }catch (Exception e) {
                 e.printStackTrace();

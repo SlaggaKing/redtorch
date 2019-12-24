@@ -86,7 +86,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 		rpcSyncSlaveNodeRuntimeDataReqBuilder.setCommonReq(commonReqBuilder);
 		rpcSyncSlaveNodeRuntimeDataReqBuilder.addAllGateway(gatewayList);
 
-		return rpcClientProcessService.sendRoutineCoreRpc(targetNodeId,
+		return rpcClientProcessService.sendCoreRpc(targetNodeId,
 				rpcSyncSlaveNodeRuntimeDataReqBuilder.build().toByteString(), reqId,
 				RpcId.SYNC_SLAVE_NODE_RUNTIME_DATA_REQ);
 	}
@@ -173,7 +173,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 		rpcPositionRtnBuilder.setCommonRtn(commonRtnBuilder);
 		rpcPositionRtnBuilder.setPosition(position);
 
-		return rpcClientProcessService.sendRoutineCoreRpc(rtnTargetNodeId, rpcPositionRtnBuilder.build().toByteString(),
+		return rpcClientProcessService.sendCoreRpc(rtnTargetNodeId, rpcPositionRtnBuilder.build().toByteString(),
 				"", RpcId.POSITION_RTN);
 	}
 
@@ -190,7 +190,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 		rpcAccountRtnBuilder.setCommonRtn(commonRtnBuilder);
 		rpcAccountRtnBuilder.setAccount(account);
 
-		return rpcClientProcessService.sendRoutineCoreRpc(rtnTargetNodeId, rpcAccountRtnBuilder.build().toByteString(),
+		return rpcClientProcessService.sendCoreRpc(rtnTargetNodeId, rpcAccountRtnBuilder.build().toByteString(),
 				"", RpcId.ACCOUNT_RTN);
 	}
 
@@ -207,7 +207,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 		rpcContractRtnBuilder.setCommonRtn(commonRtnBuilder);
 		rpcContractRtnBuilder.setContract(contract);
 
-		return rpcClientProcessService.sendRoutineCoreRpc(rtnTargetNodeId, rpcContractRtnBuilder.build().toByteString(),
+		return rpcClientProcessService.sendCoreRpc(rtnTargetNodeId, rpcContractRtnBuilder.build().toByteString(),
 				"", RpcId.CONTRACT_RTN);
 	}
 
@@ -224,7 +224,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 		rpcTickRtnBuilder.setCommonRtn(commonRtnBuilder);
 		rpcTickRtnBuilder.setTick(tick);
 
-		return rpcClientProcessService.sendRoutineCoreRpc(rtnTargetNodeId, rpcTickRtnBuilder.build().toByteString(), "",
+		return rpcClientProcessService.sendCoreRpc(rtnTargetNodeId, rpcTickRtnBuilder.build().toByteString(), "",
 				RpcId.TICK_RTN);
 	}
 
@@ -241,7 +241,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 		rpcTradeRtnBuilder.setCommonRtn(commonRtnBuilder);
 		rpcTradeRtnBuilder.setTrade(trade);
 
-		return rpcClientProcessService.sendRoutineCoreRpc(rtnTargetNodeId, rpcTradeRtnBuilder.build().toByteString(),
+		return rpcClientProcessService.sendCoreRpc(rtnTargetNodeId, rpcTradeRtnBuilder.build().toByteString(),
 				"", RpcId.TRADE_RTN);
 	}
 
@@ -258,7 +258,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 		rpcOrderRtnBuilder.setCommonRtn(commonRtnBuilder);
 		rpcOrderRtnBuilder.setOrder(order);
 
-		return rpcClientProcessService.sendRoutineCoreRpc(rtnTargetNodeId, rpcOrderRtnBuilder.build().toByteString(),
+		return rpcClientProcessService.sendCoreRpc(rtnTargetNodeId, rpcOrderRtnBuilder.build().toByteString(),
 				"", RpcId.ORDER_RTN);
 	}
 
@@ -275,7 +275,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 		rpcPositionListRtnBuilder.setCommonRtn(commonRtnBuilder);
 		rpcPositionListRtnBuilder.addAllPosition(positionList);
 
-		return rpcClientProcessService.sendRoutineCoreRpc(rtnTargetNodeId,
+		return rpcClientProcessService.sendCoreRpc(rtnTargetNodeId,
 				rpcPositionListRtnBuilder.build().toByteString(), "", RpcId.POSITION_LIST_RTN);
 	}
 
@@ -292,7 +292,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 		rpcAccountListRtnBuilder.setCommonRtn(commonRtnBuilder);
 		rpcAccountListRtnBuilder.addAllAccount(accountList);
 
-		return rpcClientProcessService.sendRoutineCoreRpc(rtnTargetNodeId,
+		return rpcClientProcessService.sendCoreRpc(rtnTargetNodeId,
 				rpcAccountListRtnBuilder.build().toByteString(), "", RpcId.ACCOUNT_LIST_RTN);
 	}
 
@@ -309,7 +309,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 		rpcContractListRtnBuilder.setCommonRtn(commonRtnBuilder);
 		rpcContractListRtnBuilder.addAllContract(contractList);
 
-		return rpcClientProcessService.sendRoutineCoreRpc(rtnTargetNodeId,
+		return rpcClientProcessService.sendCoreRpc(rtnTargetNodeId,
 				rpcContractListRtnBuilder.build().toByteString(), "", RpcId.CONTRACT_LIST_RTN);
 	}
 
@@ -326,7 +326,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 		rpcTickListRtnBuilder.setCommonRtn(commonRtnBuilder);
 		rpcTickListRtnBuilder.addAllTick(tickList);
 
-		return rpcClientProcessService.sendRoutineCoreRpc(rtnTargetNodeId, rpcTickListRtnBuilder.build().toByteString(),
+		return rpcClientProcessService.sendCoreRpc(rtnTargetNodeId, rpcTickListRtnBuilder.build().toByteString(),
 				"", RpcId.TICK_LIST_RTN);
 	}
 
@@ -343,7 +343,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 		rpcTradeListRtnBuilder.setCommonRtn(commonRtnBuilder);
 		rpcTradeListRtnBuilder.addAllTrade(tradeList);
 
-		return rpcClientProcessService.sendRoutineCoreRpc(rtnTargetNodeId,
+		return rpcClientProcessService.sendCoreRpc(rtnTargetNodeId,
 				rpcTradeListRtnBuilder.build().toByteString(), "", RpcId.TRADE_LIST_RTN);
 	}
 
@@ -360,7 +360,7 @@ public class RpcClientApiServiceImpl implements RpcClientApiService {
 		rpcOrderListRtnBuilder.setCommonRtn(commonRtnBuilder);
 		rpcOrderListRtnBuilder.addAllOrder(orderList);
 
-		return rpcClientProcessService.sendRoutineCoreRpc(rtnTargetNodeId,
+		return rpcClientProcessService.sendCoreRpc(rtnTargetNodeId,
 				rpcOrderListRtnBuilder.build().toByteString(), "", RpcId.ORDER_LIST_RTN);
 	}
 

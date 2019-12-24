@@ -8,6 +8,7 @@ ext {
         disruptorVersion = '3.4.2'
         chronicleQueueVersion = '5.17.12'
         mongoJavaDriverVersion = '3.10.2'
+        lz4JavaVersion = '1.7.0'
 }
 
 subprojects {
@@ -48,8 +49,6 @@ subprojects {
 	}
 	
 	dependencies {  
-		//compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.12.0'
-  		//compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.12.0'
   		compile 'org.slf4j:slf4j-api:1.7.26'
 	    compile 'ch.qos.logback:logback-core:1.2.3'
 	    compile 'ch.qos.logback:logback-classic:1.2.3'
